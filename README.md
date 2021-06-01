@@ -1,16 +1,16 @@
-Install Yarn
-npm install -g yarn
-cd
-yarn set version berry
+A simple Currency Exchange Tool made with Svelte. 
+It uses Awesome Api to fecth data.
+https://docs.awesomeapi.com.br/api-de-moedas
 
-isntall svelte-select
-yarn add svelte-select
-
-install Rollup
-npm install --global rollup
-
-install Rollup Svelte
-npm install --save-dev svelte rollup-plugin-svelte
-
-FORGET ALL, JUST USE
-npm install svelte-select
+Supported Currencies:
+  'BRL'
+  'CAD'
+  'EUR'
+  'JPY'
+  'BTC'
+  'ETH'
+  'USD'
+  
+ 
+Link:
+https://clean-currency-exchange.netlify.app/
