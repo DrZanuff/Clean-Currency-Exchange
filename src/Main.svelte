@@ -1,10 +1,19 @@
 <script>
     import Button from './Button.svelte';
     import InputCoin from './InputCoin.svelte';
+    import Spinner from './Spinner.svelte';
     import { onMount } from 'svelte';
+    import { fade } from 'svelte/transition';
 
+    let ready = false;
+    let visible = true;
+
+    let locked1 = true;
+    let locked2 = true;
     let input1 = "";
     let input2 = "";
+    let value1 = 0;
+    let value2 = 0;
 
     var link = 'https://economia.awesomeapi.com.br/last/';
 
@@ -66,25 +75,56 @@
                 }
 
             }
-
-            console.log(data);
+            
+            ready = true;
 
     });
 
+    function dataChange1(e){
+        input1 = e.detail.coin.value;
+        locked1 = false;
+        calc1()
+    }
+
+    function dataChange2(e){
+        input2 = e.detail.coin.value;
+        locked2 = false;
+        calc2()
+    }
+
+    function calc1(){
+        const newValue = data[input1+'-'+input2] * value1;
+        const step = ( input1 == 'BTC' || input2 == 'BTC' || input1 == 'ETH' || input2 == 'ETH') ? 8 : 4;
+        value2 = parseFloat( ( newValue  ).toFixed(step) );
+    }
+
+    function calc2(){
+        const newValue = data[input2+'-'+input1] * value2;
+        const step = ( input1 == 'BTC' || input2 == 'BTC' || input1 == 'ETH' || input2 == 'ETH') ? 8 : 4;
+        value1 = parseFloat( ( newValue ).toFixed(step) );
+    }
 
 </script>
 
 <div class="box">
     <h1>CLEAN CURRENCY EXCHANGE</h1>
     <hr>
-    <div id="row">
-        <Button></Button>
-        <Button></Button>
-    </div>
-    <div>
-        <InputCoin></InputCoin>
-        <InputCoin></InputCoin>
-    </div>
+    {#if ready}
+        <div id="row">
+            <Button on:changeCoin={dataChange1} bind:visible={visible}></Button>
+            <Button on:changeCoin={dataChange2} bind:visible={visible}></Button>
+        </div>
+            <div class='container'>
+                {#if visible}
+                    <div transition:fade>
+                        <InputCoin bind:value={value1} disable={locked1} on:changeValue={calc1}></InputCoin>
+                        <InputCoin bind:value={value2} disable={locked2} on:changeValue={calc2}></InputCoin>
+                    </div>
+                {/if}
+            </div>
+    {:else}
+        <Spinner></Spinner>
+    {/if}
 </div>
 
 <style>
@@ -94,7 +134,7 @@
         margin-right: auto;
         margin-bottom: 17%;
         height: 225px; 
-        width: 50%;
+        width: 70%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -117,6 +157,10 @@
         width: 70%;
         border-top: 1px;
         opacity: .5;
+    }
+
+    .container{
+        min-height: 90.781px;
     }
 
     #row{

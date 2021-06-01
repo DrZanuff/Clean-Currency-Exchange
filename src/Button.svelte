@@ -4,7 +4,7 @@
         --border: 2px solid #fff;
         --borderRadius: 2px;
         color: white;
-        min-width: 137px;
+        min-width: 200px;
         font-family: Sarala;
         --listBackground: #04040446;
         --itemColor: #FFFFFF;
@@ -17,7 +17,7 @@
     .select:focus-within{
         --background : #ffffff;
         color: #494949;
-        min-width: 137px;
+        min-width: 200px;
         font-family: Sarala;
         --listBackground: #04040446;
         --itemColor: #FFFFFF;
@@ -32,6 +32,10 @@
 
 <script>
     import Select from 'svelte-select';
+    import { createEventDispatcher } from 'svelte';
+    const dispatch = createEventDispatcher();
+
+    export let visible = true;
 
     let items = [
         {value: 'USD', label: 'USD'},
@@ -46,11 +50,16 @@
     let selectedValue = {value: 'none', label: 'Select Coin'};
 
     function handle(event){
-        console.log(event.detail);
+        dispatch('changeCoin', { 'coin' : event.detail } );
+        visible = true;
+    }
+
+    function click(){
+        visible = false;
     }
 
 </script>
 
-<div class="select">
-    <Select {items} {selectedValue} on:select={handle}></Select>
+<div class="select" on:click={click}>
+    <Select id='sel' {items} {selectedValue} on:select={handle}></Select>
 </div>
