@@ -27,5 +27,6 @@
         font-family: Sarala;
         color: white;
 /*         text-align: center; */
+
     }
 </style>
